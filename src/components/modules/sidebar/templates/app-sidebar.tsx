@@ -13,10 +13,16 @@ import {
 
 import NavMain from "../components/nav-main"
 import NavUser from "../components/nav-user"
-import NavProjects from "../components/nav-projects"
 import NavLogo from "../components/nav-logo"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import NavAdmin from "../components/nav-admin"
 
 const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const user = session?.user
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -29,8 +35,10 @@ const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        {
+          user?.role === "admin" && <NavAdmin />
+        }
         <NavMain />
-        <NavProjects />
       </SidebarContent>
       <SidebarFooter>
         <Suspense fallback={<div>Loading..</div>}>

@@ -35,7 +35,7 @@ type Project = {
   icon: LucideIcon
 }
 
-const NavProjects = () => {
+const NavAdmin = () => {
 
   const projects: Project[] = [
     {
@@ -59,7 +59,7 @@ const NavProjects = () => {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Admin</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
@@ -109,4 +109,4 @@ const NavProjects = () => {
   )
 }
 
-export default NavProjects;
+export default NavAdmin;
