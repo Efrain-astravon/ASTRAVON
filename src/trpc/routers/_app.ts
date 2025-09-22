@@ -1,20 +1,21 @@
-import { z } from "zod";
 import { baseProcedure, createTRPCRouter } from "../init";
 import { authRouter } from "./auth";
+import { chapterRouter } from "./chapter";
+import { courseRouter } from "./course";
+import { mediaRouter } from "./media";
+import { schoolRouter } from "./school";
 
 export const appRouter = createTRPCRouter({
-  hello: baseProcedure
-    .input(
-      z.object({
-        text: z.string(),
-      })
-    )
-    .query((opts) => {
-      return {
-        greeting: `hello ${opts.input.text}`,
-      };
-    }),
+  healthcheck: baseProcedure.query(() => {
+    return {
+      message: `tRPC backend is Healthy`,
+    };
+  }),
   authRouter,
+  schoolRouter,
+  courseRouter,
+  chapterRouter,
+  mediaRouter,
 });
 
 export type AppRouter = typeof appRouter;
