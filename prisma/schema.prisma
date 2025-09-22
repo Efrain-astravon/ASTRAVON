@@ -10,6 +10,19 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum ChapterType {
+  TEXT
+  AUDIO
+  VIDEO
+  MIXED
+}
+
 model User {
   id            String    @id @default(uuid())
   name          String
@@ -20,6 +33,7 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+  courses       Course[]
 
   role       String    @default("user")
   banned     Boolean?  @default(false)
@@ -75,4 +89,62 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model School {
+  id        String   @id @default(uuid())
+  name      String
+  level     Level
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses Course[]
+
+  @@map("school")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      String
+  level       Level
+  thumbnail   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  teacher   User   @relation(fields: [teacherId], references: [id])
+  teacherId String
+
+  school   School @relation(fields: [schoolId], references: [id])
+  schoolId String
+
+  chapters Chapter[]
+
+  @@map("course")
+}
+
+model Chapter {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  type        ChapterType
+  content     String
+
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
+
+  media Media[]
+
+  @@map("chapter")
+}
+
+model Media {
+  id  String @id @default(uuid())
+  url String
+
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapterId String
+
+  @@map("media")
 }
