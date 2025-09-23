@@ -1,109 +1,92 @@
 "use client"
 
 import {
-  FrameIcon,
-  MapIcon,
-  PieChartIcon,
-  Folder,
-  Forward,
-  MoreHorizontal,
-  Trash2,
   type LucideIcon,
+  School2Icon,
+  Users2Icon,
+  LibraryBigIcon,
+  BookOpenIcon,
+  SquarePlayIcon,
 } from "lucide-react"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
-
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible"
 
 type Project = {
   name: string
   url: string
   icon: LucideIcon
+  isActive?: boolean,
 }
 
 const NavAdmin = () => {
 
+  const pathName = usePathname()
+
   const projects: Project[] = [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: FrameIcon,
+      name: "Escuelas",
+      url: "/dashboard/school",
+      icon: School2Icon,
+      // isActive: false,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChartIcon,
+      name: "Cursos",
+      url: "/dashboard/course",
+      icon: LibraryBigIcon,
+      // isActive: false,
     },
     {
-      name: "Travel",
-      url: "#",
-      icon: MapIcon,
+      name: "Capítulos",
+      url: "/dashboard/chapter",
+      icon: BookOpenIcon,
+      // isActive: false,
+    },
+    {
+      name: "Multimedia",
+      url: "/dashboard/media",
+      icon: SquarePlayIcon,
+      // isActive: false,
+    },
+    {
+      name: "Usuarios",
+      url: "/dashboard/user",
+      icon: Users2Icon,
+      // isActive: false,
     },
   ]
 
-  const { isMobile } = useSidebar()
-
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Admin</SidebarGroupLabel>
+    <SidebarGroup className="">
+      <SidebarGroupLabel>Admin Platform</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
-            </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
-              >
-                <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
+          <Collapsible
+            key={item.name}
+            asChild
+            defaultOpen={item.isActive}
+            className=""
+          >
+            <Link href={item.url} className="w-full">
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip={item.name} className={`${pathName === item.url && "bg-primary/90 hover:bg-primary "}`}>
+                    {item.icon && <item.icon className="size-4" />}
+                    <span>{item.name}</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+              </SidebarMenuItem>
+            </Link>
+          </Collapsible>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
   )

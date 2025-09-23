@@ -20,6 +20,7 @@ export const schoolRouter = createTRPCRouter({
       });
       return newSchool;
     }),
+
   get: protectedProcedure.input(schoolIdSchema).query(async ({ input }) => {
     const school = await prisma.school.findUnique({
       where: { id: input.id },
@@ -35,6 +36,7 @@ export const schoolRouter = createTRPCRouter({
       orderBy: { createdAt: "desc" },
     });
   }),
+
   update: protectedProcedure
     .input(updateSchoolSchema)
     .mutation(async ({ input }) => {
@@ -51,9 +53,11 @@ export const schoolRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "School not found" });
       }
     }),
+
   delete: protectedProcedure
     .input(schoolIdSchema)
     .mutation(async ({ input }) => {
+      console.log(input.id)
       try {
         await prisma.school.delete({
           where: { id: input.id },
@@ -63,6 +67,7 @@ export const schoolRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "School not found" });
       }
     }),
+
   upsert: protectedProcedure
     .input(upsertSchoolSchema)
     .mutation(async ({ input }) => {

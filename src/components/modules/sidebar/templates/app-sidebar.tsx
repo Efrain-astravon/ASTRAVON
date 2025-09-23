@@ -11,18 +11,11 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-import NavMain from "../components/nav-main"
 import NavUser from "../components/nav-user"
 import NavLogo from "../components/nav-logo"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
 import NavAdmin from "../components/nav-admin"
 
-const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const user = session?.user
+const AppSidebar = ({ ...props }: ComponentProps<typeof Sidebar>) => {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -35,10 +28,7 @@ const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {
-          user?.role === "admin" && <NavAdmin />
-        }
-        <NavMain />
+        <NavAdmin />
       </SidebarContent>
       <SidebarFooter>
         <Suspense fallback={<div>Loading..</div>}>
