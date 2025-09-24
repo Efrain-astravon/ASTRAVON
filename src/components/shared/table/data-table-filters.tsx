@@ -18,15 +18,19 @@ interface DataTableFiltersProps<T> {
   id: string
   onDeleteRows?: () => void
   addNewItemButton?: ReactNode
-  filterPlaceholder?: string
+  searchFilterPlaceholder?: string
+  filterComponent?: ReactNode
+  columnTranslations?: Record<string, string>
 }
 
-function DataTableFilters<T>({ table, id, addNewItemButton, onDeleteRows, filterPlaceholder }: DataTableFiltersProps<T>) {
+function DataTableFilters<T>({ table, id, addNewItemButton, onDeleteRows, searchFilterPlaceholder, filterComponent, columnTranslations }: DataTableFiltersProps<T>) {
   // Ejemplo simple: filtro global en la primera columna (se puede mejorar o hacer multi)
   const inputRef = useRef<HTMLInputElement>(null)
 
   // Ejemplo de filtros de columnas visibles
   const columnsWithVisibility = table.getAllColumns().filter(col => col.getCanHide())
+
+  const translations = columnTranslations ?? {}
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -39,9 +43,9 @@ function DataTableFilters<T>({ table, id, addNewItemButton, onDeleteRows, filter
             className="peer xl:min-w-80 md:min-w-60 min-w-40 ps-9"
             value={(table.getColumn("name")?.getFilterValue() ?? "") as string}
             onChange={(e) => table.getColumn("name")?.setFilterValue(e.target.value)}
-            placeholder={`${filterPlaceholder}...`}
+            placeholder={`${searchFilterPlaceholder}...`}
             type="text"
-            aria-label={`${filterPlaceholder}`}
+            aria-label={`${searchFilterPlaceholder}`}
           />
           <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
             <ListFilterIcon size={16} aria-hidden="true" />
@@ -62,16 +66,20 @@ function DataTableFilters<T>({ table, id, addNewItemButton, onDeleteRows, filter
           )}
         </div>
 
+        {filterComponent && <>
+          {filterComponent}
+        </>}
+
         {/* Toggle columnas */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
               <Columns3Icon size={16} aria-hidden="true" />
-              View
+              Columnas
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+            <DropdownMenuLabel>Mostrar:</DropdownMenuLabel>
             {columnsWithVisibility.map(col => (
               <DropdownMenuCheckboxItem
                 key={col.id}
@@ -80,7 +88,7 @@ function DataTableFilters<T>({ table, id, addNewItemButton, onDeleteRows, filter
                 onCheckedChange={value => col.toggleVisibility(!!value)}
                 onSelect={e => e.preventDefault()}
               >
-                {col.id}
+                {translations[col.id] ?? col.id}
               </DropdownMenuCheckboxItem>
             ))}
           </DropdownMenuContent>

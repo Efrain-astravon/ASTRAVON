@@ -36,31 +36,26 @@ const NavAdmin = () => {
       name: "Escuelas",
       url: "/dashboard/school",
       icon: School2Icon,
-      // isActive: false,
     },
     {
       name: "Cursos",
       url: "/dashboard/course",
       icon: LibraryBigIcon,
-      // isActive: false,
     },
     {
       name: "Capítulos",
       url: "/dashboard/chapter",
       icon: BookOpenIcon,
-      // isActive: false,
     },
     {
       name: "Multimedia",
       url: "/dashboard/media",
       icon: SquarePlayIcon,
-      // isActive: false,
     },
     {
       name: "Usuarios",
       url: "/dashboard/user",
       icon: Users2Icon,
-      // isActive: false,
     },
   ]
 

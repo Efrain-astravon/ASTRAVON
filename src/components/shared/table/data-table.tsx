@@ -25,16 +25,22 @@ type DataTableProps<T> = {
   columns: ColumnDef<T>[]
   data: T[]
   onDeleteRows?: (rows: T[]) => void
+  onDoubleClickRow?: (row: T) => void
   addNewItemButton?: ReactNode
-  filterPlaceholder?: string
+  searchFilterPlaceholder?: string
+  filterComponent?: ReactNode,
+  columnTranslations?: Record<string, string>
 }
 
 function DataTable<T>({
   columns,
   data,
   onDeleteRows,
+  onDoubleClickRow,
   addNewItemButton,
-  filterPlaceholder = "Filter by name..."
+  searchFilterPlaceholder = "Filter by name...",
+  filterComponent,
+  columnTranslations
 }: DataTableProps<T>) {
   const id = useId()
 
@@ -77,7 +83,15 @@ function DataTable<T>({
 
   return (
     <div className="space-y-4">
-      <DataTableFilters table={table} id={id} addNewItemButton={addNewItemButton} onDeleteRows={handleDeleteRows} filterPlaceholder={filterPlaceholder} />
+      <DataTableFilters
+        table={table}
+        id={id}
+        addNewItemButton={addNewItemButton}
+        onDeleteRows={handleDeleteRows}
+        searchFilterPlaceholder={searchFilterPlaceholder}
+        filterComponent={filterComponent}
+        columnTranslations={columnTranslations}
+      />
 
       <div className="overflow-hidden rounded-md border">
         <Table className="table-fixed">
@@ -127,7 +141,10 @@ function DataTable<T>({
           <TableBody>
             {table.getRowModel().rows.length > 0 ? (
               table.getRowModel().rows.map(row => (
-                <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
+                <TableRow
+                  key={row.id}
+                  onDoubleClick={() => onDoubleClickRow?.(row.original)}
+                  data-state={row.getIsSelected() ? "selected" : undefined}>
                   {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id} className="last:py-0">
                       {cell.column.columnDef.cell instanceof Function
@@ -147,7 +164,7 @@ function DataTable<T>({
           </TableBody>
         </Table>
       </div>
-      
+
       <DataTablePagination table={table} id={id} />
     </div>
   )

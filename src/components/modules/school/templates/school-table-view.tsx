@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from 'react'
+
 import { useTRPC } from '@/trpc/client'
 import { SchoolType } from '@/trpc/routers/school/schemas'
 import { LevelEnum } from '@/trpc/routers/shared/enums'
@@ -15,7 +17,11 @@ import { DateFormatter } from '@/components/shared/date/date-formatter'
 import SchoolCreateButton from '@/components/modules/school/components/school-create-button'
 import SchoolActionsDropdown from '@/components/modules/school/components/school-actions-dropdown'
 
+import MultiSelectFilter from '@/components/shared/table/data-table-multiselect-filter'
+
 import { Checkbox } from '@/components/ui/checkbox'
+import { useRouter } from 'next/navigation'
+
 
 const multiColumnFilterFn: FilterFn<SchoolType> = (row, columnId, filterValue) => {
   const searchableRowContent =
@@ -69,7 +75,6 @@ const columns: ColumnDef<SchoolType>[] = [
     cell: ({ row }) => {
       const levelValue = row.getValue("level");
       const parsed = LevelEnum.safeParse(levelValue);
-      // Si el valor no es válido, pasa null o undefined para que salga —
       return <LevelFormatter level={parsed.success ? parsed.data : null} />;
     },
     size: 150,
@@ -103,21 +108,58 @@ const columns: ColumnDef<SchoolType>[] = [
 type SchoolTableViewProps = {}
 
 const SchoolTableView = ({ }: SchoolTableViewProps) => {
+  const router = useRouter()
+
   const trpc = useTRPC()
   const { data } = useSuspenseQuery(trpc.schoolRouter.list.queryOptions())
 
   const onDeleteRows = (rowsToDelete: SchoolType[]) => {
     // TODO: implement row deletion logic here
     // e.g. setData((old) => old.filter(d => !rowsToDelete.find(row => row.id === d.id)))
+    console.log(rowsToDelete)
+  }
+
+  const handleDoubleClickRow = (row: SchoolType) => {
+    router.push(`/dashboard/school/${row.id}`)
+  }
+
+  // State to track selected levels
+  const [selectedLevels, setSelectedLevels] = useState<string[]>([])
+  const uniqueLevels = Array.from(new Set(data?.map((item) => item.level) ?? []))
+  const levelOptions = uniqueLevels.map(level => ({
+    value: level,
+    label: <LevelFormatter level={LevelEnum.parse(level)} />,
+  }))
+
+  const filteredData = data?.filter((item) => {
+    if (!selectedLevels.length) return true
+    return selectedLevels.includes(item.level)
+  }) ?? []
+
+  const schoolTranslations = {
+    level: "Nivel",
+    createdAt: "Fecha creación",
+    updatedAt: "Última actualización",
+    name: "Nombre",
   }
 
   return (
     <DataTable
       columns={columns}
-      data={data ?? []}
+      data={filteredData}
       onDeleteRows={onDeleteRows}
+      onDoubleClickRow={handleDoubleClickRow}
       addNewItemButton={<SchoolCreateButton />}
-      filterPlaceholder="Search by name or level"
+      searchFilterPlaceholder="Search by name or level"
+      filterComponent={
+        <MultiSelectFilter
+          label="Niveles"
+          options={levelOptions}
+          selectedValues={selectedLevels}
+          onChange={setSelectedLevels}
+        />
+      }
+      columnTranslations={schoolTranslations}
     />
   )
 }
