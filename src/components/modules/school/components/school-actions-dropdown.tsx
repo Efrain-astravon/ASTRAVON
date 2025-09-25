@@ -25,6 +25,10 @@ type SchoolActionsDropdownProps<T> = {
 const SchoolActionsDropdown = <T,>({ row, className, align = "center" }: SchoolActionsDropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false)
 
+  const handleDoubleClickInsideMenu = (event: React.MouseEvent) => {
+    event.stopPropagation()
+  }
+
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
@@ -40,7 +44,7 @@ const SchoolActionsDropdown = <T,>({ row, className, align = "center" }: SchoolA
         </div>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align={align}>
+      <DropdownMenuContent align={align} onDoubleClick={handleDoubleClickInsideMenu}>
         <DropdownMenuGroup >
           <DropdownMenuItem asChild>
             <SchoolEditButton
