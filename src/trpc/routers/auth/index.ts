@@ -3,5 +3,5 @@ import { usersRouter } from "./user";
 
 export const authRouter = createTRPCRouter({
   // Users
-  ...usersRouter,
+  user: usersRouter,
 });

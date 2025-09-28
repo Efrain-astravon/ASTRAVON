@@ -16,9 +16,13 @@ export const courseRouter = createTRPCRouter({
         data: {
           title: input.title,
           description: input.description,
+          smallDescription: input.smallDescription,
+          price: input.price,
+          duration: input.duration,
+          slug: input.slug,
           status: input.status,
           level: input.level,
-          thumbnail: input.thumbnail,
+          thumbnailUrl: input.thumbnailUrl,
           teacherId: input.teacherId,
           schoolId: input.schoolId,
         },
@@ -46,17 +50,25 @@ export const courseRouter = createTRPCRouter({
     .input(updateCourseSchema)
     .mutation(async ({ input }) => {
       try {
+        const data: any = {};
+        if (input.title !== undefined) data.title = input.title;
+        if (input.description !== undefined)
+          data.description = input.description;
+        if (input.smallDescription !== undefined)
+          data.smallDescription = input.smallDescription;
+        if (input.price !== undefined) data.price = input.price;
+        if (input.duration !== undefined) data.duration = input.duration;
+        if (input.slug !== undefined) data.slug = input.slug;
+        if (input.status !== undefined) data.status = input.status;
+        if (input.level !== undefined) data.level = input.level;
+        if (input.thumbnailUrl !== undefined)
+          data.thumbnailUrl = input.thumbnailUrl;
+        if (input.teacherId !== undefined) data.teacherId = input.teacherId;
+        if (input.schoolId !== undefined) data.schoolId = input.schoolId;
+
         const updatedCourse = await prisma.course.update({
           where: { id: input.id },
-          data: {
-            title: input.title,
-            description: input.description,
-            status: input.status,
-            level: input.level,
-            thumbnail: input.thumbnail,
-            teacherId: input.teacherId,
-            schoolId: input.schoolId,
-          },
+          data,
         });
         return updatedCourse;
       } catch {
@@ -80,19 +92,25 @@ export const courseRouter = createTRPCRouter({
   upsert: protectedProcedure
     .input(upsertCourseSchema)
     .mutation(async ({ input }) => {
+      const data = {
+        title: input.title,
+        description: input.description,
+        smallDescription: input.smallDescription,
+        price: input.price,
+        duration: input.duration,
+        slug: input.slug,
+        status: input.status,
+        level: input.level,
+        thumbnailUrl: input.thumbnailUrl,
+        teacherId: input.teacherId,
+        schoolId: input.schoolId,
+      };
+
       if (input.id) {
         try {
           const updatedCourse = await prisma.course.update({
             where: { id: input.id },
-            data: {
-              title: input.title,
-              description: input.description,
-              status: input.status,
-              level: input.level,
-              thumbnail: input.thumbnail,
-              teacherId: input.teacherId,
-              schoolId: input.schoolId,
-            },
+            data,
           });
           return updatedCourse;
         } catch {
@@ -103,15 +121,7 @@ export const courseRouter = createTRPCRouter({
         }
       } else {
         const newCourse = await prisma.course.create({
-          data: {
-            title: input.title,
-            description: input.description,
-            status: input.status,
-            level: input.level,
-            thumbnail: input.thumbnail,
-            teacherId: input.teacherId,
-            schoolId: input.schoolId,
-          },
+          data,
         });
         return newCourse;
       }

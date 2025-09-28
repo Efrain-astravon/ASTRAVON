@@ -28,6 +28,7 @@ type DataTableProps<T> = {
   onDoubleClickRow?: (row: T) => void
   addNewItemButton?: ReactNode
   searchFilterPlaceholder?: string
+  searchFilterColumnName: string
   filterComponent?: ReactNode,
   columnTranslations?: Record<string, string>
 }
@@ -38,6 +39,7 @@ function DataTable<T>({
   onDeleteRows,
   onDoubleClickRow,
   addNewItemButton,
+  searchFilterColumnName,
   searchFilterPlaceholder = "Filter by name...",
   filterComponent,
   columnTranslations
@@ -89,6 +91,7 @@ function DataTable<T>({
         addNewItemButton={addNewItemButton}
         onDeleteRows={handleDeleteRows}
         searchFilterPlaceholder={searchFilterPlaceholder}
+        searchFilterColumnName={searchFilterColumnName}
         filterComponent={filterComponent}
         columnTranslations={columnTranslations}
       />

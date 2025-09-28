@@ -12,7 +12,7 @@ import { caller } from "@/trpc/server"
 import { User } from "better-auth"
 
 const NavUser = async () => {
-  const user: User = await caller.authRouter.getCurrentUser()
+  const user: User = await caller.authRouter.user.getCurrentUser()
   return (
     <SidebarMenu>
       <SidebarMenuItem>

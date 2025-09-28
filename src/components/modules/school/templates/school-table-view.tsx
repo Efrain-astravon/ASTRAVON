@@ -151,6 +151,7 @@ const SchoolTableView = ({ }: SchoolTableViewProps) => {
       onDoubleClickRow={handleDoubleClickRow}
       addNewItemButton={<SchoolCreateButton />}
       searchFilterPlaceholder="Search by name or level"
+      searchFilterColumnName="name"
       filterComponent={
         <MultiSelectFilter
           label="Niveles"
