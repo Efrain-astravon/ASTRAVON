@@ -75,3 +75,11 @@ export const upsertCourseSchema = z.object({
 });
 
 export type UpsertCourseType = z.infer<typeof upsertCourseSchema>;
+
+export const listCouseWithSchoolIdSchema = z.object({
+  schoolId: z.uuid(),
+});
+
+export type ListCouseWithSchoolIdSchema = z.infer<
+  typeof listCouseWithSchoolIdSchema
+>;

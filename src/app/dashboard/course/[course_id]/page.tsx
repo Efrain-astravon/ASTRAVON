@@ -1,3 +1,4 @@
+import CourseIndividualView from '@/components/modules/course/templates/course-individual-view'
 import React from 'react'
 
 type CourseIdPageProps = {
@@ -7,7 +8,9 @@ type CourseIdPageProps = {
 const CourseIdPage = async ({ params }: CourseIdPageProps) => {
   const { course_id } = await params
   return (
-    <div>CourseIdPage {course_id}</div>
+    <CourseIndividualView
+      course_id={course_id}
+    />
   )
 }
 

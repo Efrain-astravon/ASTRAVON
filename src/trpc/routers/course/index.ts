@@ -3,6 +3,7 @@ import {
   courseIdSchema,
   updateCourseSchema,
   upsertCourseSchema,
+  listCouseWithSchoolIdSchema,
 } from "./schemas";
 import { TRPCError } from "@trpc/server";
 import prisma from "@/lib/prisma";
@@ -45,6 +46,16 @@ export const courseRouter = createTRPCRouter({
       orderBy: { createdAt: "desc" },
     });
   }),
+
+  listBySchool: protectedProcedure
+    .input(listCouseWithSchoolIdSchema)
+    .query(async ({ input }) => {
+      const courses = await prisma.course.findMany({
+        where: { schoolId: input.schoolId },
+        orderBy: { createdAt: "desc" },
+      });
+      return courses;
+    }),
 
   update: protectedProcedure
     .input(updateCourseSchema)

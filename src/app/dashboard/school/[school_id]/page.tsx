@@ -1,3 +1,4 @@
+import SchoolIndividualView from '@/components/modules/school/templates/school-individual-view'
 import React from 'react'
 
 type SchoolIdPageProps = {
@@ -7,7 +8,9 @@ type SchoolIdPageProps = {
 const SchoolIdPage = async ({ params }: SchoolIdPageProps) => {
   const { school_id } = await params
   return (
-    <div>SchoolIdPage {school_id} </div>
+    <SchoolIndividualView
+      school_id={school_id}
+    />
   )
 }
 
