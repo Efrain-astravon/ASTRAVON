@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  // previewFeatures = ["driverAdapters"]
   output          = "../src/generated/prisma"
 }
 
@@ -21,6 +21,12 @@ enum ChapterType {
   AUDIO
   VIDEO
   MIXED
+}
+
+enum ShowStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
 model User {
@@ -104,14 +110,18 @@ model School {
 }
 
 model Course {
-  id          String   @id @default(uuid())
-  title       String
-  description String?
-  status      String
-  level       Level
-  thumbnail   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String     @id @default(uuid())
+  title            String
+  description      String?
+  smallDescription String?
+  price            Float?
+  duration         Int?
+  slug             String?    @unique
+  status           ShowStatus
+  level            Level
+  thumbnailUrl     String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 
   teacher   User   @relation(fields: [teacherId], references: [id])
   teacherId String

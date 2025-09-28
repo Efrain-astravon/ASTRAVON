@@ -1,4 +1,5 @@
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "db";
+// import { PrismaClient } from "@/generated/prisma";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { withAccelerate } from "@prisma/extension-accelerate";
