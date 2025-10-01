@@ -26,13 +26,14 @@ const LastCourseCard = ({ course }: LastCourseCardProps) => {
           <Image
             src={course.imagen_url}
             alt={`Imagen del curso ${course.titulo}`}
-            fill
-            className=" object-fit rounded-t-xl"
+            height={200}
+            width={600}
+            className="object-fit rounded-t-xl"
             priority
           />
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className='pt-12'>
         <div className="p-6 flex flex-col justify-between h-full">
           <h2 className="text-xl font-semibold mb-2">{course.titulo}</h2>
           <p className="text-sm mb-4 line-clamp-3">
