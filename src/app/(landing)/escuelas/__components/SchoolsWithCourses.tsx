@@ -26,17 +26,6 @@ const SchoolsWithCourses = () => {
   const { data: schools } = useSuspenseQuery(
     trpc.landingPageRouter.listWithCourses.queryOptions()
   )
-  // const { data: schools, isPending, isError } = useSuspenseQuery(
-  //   trpc.landingPageRouter.listWithCourses.queryOptions()
-  // )
-
-  // if (isPending || !schools) {
-  //   return <div>Loading...</div>
-  // }
-
-  // if (isError) {
-  //   return <div>Error...</div>
-  // }
 
   const [selectedSchoolIds, setSelectedSchoolIds] = useState<string[]>(
     schools.length > 0 ? [schools[0].id] : []

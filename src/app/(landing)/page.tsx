@@ -1,6 +1,5 @@
 import HeroLandingPage from "./__components/Hero"
 import LandingGallery from "./__components/LandingGallery";
-import Testing from "./__components/Testing";
 
 const lastCourse = {
   titulo: "Termodinámica Avanzada",
@@ -31,7 +30,6 @@ const HomeLandingPage = () => {
           totalEscuelas={totalEscuelas}
           totalCursos={totalCursos}
         />
-        <Testing />
       </div>
     </div>
   )
