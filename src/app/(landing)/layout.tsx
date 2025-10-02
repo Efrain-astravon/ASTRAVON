@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Navbar from "./__components/Navbar";
 
 type DashboardLayoutProps = {

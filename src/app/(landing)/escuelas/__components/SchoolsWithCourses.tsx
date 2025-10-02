@@ -1,7 +1,7 @@
 "use client"
 
 import { useTRPC } from "@/trpc/client"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { useState, useMemo } from "react"
 import { SchoolFilter } from "./SchoolFilter"
 import CoursesAccordion from "./CoursesAccordion"
@@ -23,10 +23,20 @@ type School = {
 
 const SchoolsWithCourses = () => {
   const trpc = useTRPC()
-
   const { data: schools } = useSuspenseQuery(
     trpc.landingPageRouter.listWithCourses.queryOptions()
   )
+  // const { data: schools, isPending, isError } = useSuspenseQuery(
+  //   trpc.landingPageRouter.listWithCourses.queryOptions()
+  // )
+
+  // if (isPending || !schools) {
+  //   return <div>Loading...</div>
+  // }
+
+  // if (isError) {
+  //   return <div>Error...</div>
+  // }
 
   const [selectedSchoolIds, setSelectedSchoolIds] = useState<string[]>(
     schools.length > 0 ? [schools[0].id] : []
@@ -44,6 +54,7 @@ const SchoolsWithCourses = () => {
     const selectedSchools = schools.filter((school) =>
       selectedSchoolIds.includes(school.id)
     )
+
     const allCourses = selectedSchools.flatMap((school) =>
       school.courses.map((course) => ({
         ...course,
@@ -56,6 +67,7 @@ const SchoolsWithCourses = () => {
             : course.duration ?? null,
       }))
     )
+
     const grouped = allCourses.reduce((acc, course) => {
       const level = course.level || "BEGINNER"
       if (!acc[level]) {
@@ -64,12 +76,19 @@ const SchoolsWithCourses = () => {
       acc[level].push(course)
       return acc
     }, {} as Record<string, typeof allCourses>)
+
     return grouped
   }, [schools, selectedSchoolIds])
 
   const sortedLevels = useMemo(() => {
     return LEVEL_ORDER.filter((level) => coursesByLevel[level]?.length > 0)
   }, [coursesByLevel])
+
+  const defaultOpenLevels = useMemo(() => {
+    if (sortedLevels.includes("BEGINNER")) return ["BEGINNER"]
+    if (sortedLevels.length > 0) return [sortedLevels[0]]
+    return []
+  }, [sortedLevels])
 
   return (
     <div className="w-full flex flex-col grow max-w-7xl mx-auto pt-8 gap-8 px-8">
@@ -90,7 +109,11 @@ const SchoolsWithCourses = () => {
             No hay cursos disponibles para las escuelas seleccionadas
           </div>
         ) : (
-          <CoursesAccordion coursesByLevel={coursesByLevel} sortedLevels={sortedLevels} />
+          <CoursesAccordion
+            coursesByLevel={coursesByLevel}
+            sortedLevels={sortedLevels}
+            defaultOpenLevels={defaultOpenLevels}
+          />
         )}
       </div>
     </div>

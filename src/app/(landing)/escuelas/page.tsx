@@ -5,6 +5,8 @@ import { Suspense } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import SchoolsWithCourses from "./__components/SchoolsWithCourses"
 
+// export const revalidate = 60; // Enable ISR every 60 seconds
+
 type Props = {}
 
 const EscuelasLandingPage = (props: Props) => {

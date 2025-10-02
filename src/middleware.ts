@@ -33,21 +33,26 @@ export async function middleware(request: NextRequest) {
   // console.log("✅ middleware disparado en:", request.nextUrl.pathname);
   const { pathname } = request.nextUrl;
 
-  const { data: session } = await betterFetch<Session>(
-    "/api/auth/get-session",
-    {
-      baseURL: request.nextUrl.origin,
-      headers: {
-        cookie: request.headers.get("cookie") || "",
-      },
+  try {
+    const { data: session } = await betterFetch<Session>(
+      "/api/auth/get-session",
+      {
+        baseURL: request.nextUrl.origin,
+        headers: {
+          cookie: request.headers.get("cookie") || "",
+        },
+      }
+    );
+
+    if (session && (pathname === "/sign-in" || pathname === "/sign-up")) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
-  );
 
-  if (session && (pathname === "/sign-in" || pathname === "/sign-up")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
-
-  if (!session && pathname.startsWith("/dashboard")) {
+    if (!session && pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
+  } catch (error) {
+    console.error("[Better Auth] Middleware session error:", error);
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 

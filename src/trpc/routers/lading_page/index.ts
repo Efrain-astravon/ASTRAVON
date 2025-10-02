@@ -16,6 +16,7 @@ export const landingPageRouter = createTRPCRouter({
       });
       return schools as SchoolsWithCoursesArrayType;
     } catch (error) {
+      console.log("Error fetching schools with courses:", error);
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Error fetching schools with courses",

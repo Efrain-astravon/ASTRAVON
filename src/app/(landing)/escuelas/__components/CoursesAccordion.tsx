@@ -28,11 +28,16 @@ type Course = {
 type Props = {
   coursesByLevel: Record<string, Course[]>
   sortedLevels: string[]
+  defaultOpenLevels?: string[]
 }
 
-const CoursesAccordion = ({ coursesByLevel, sortedLevels }: Props) => {
+const CoursesAccordion = ({ coursesByLevel, sortedLevels, defaultOpenLevels }: Props) => {
   return (
-    <Accordion type="multiple" defaultValue={sortedLevels} className="space-y-4 grow">
+    <Accordion
+      type="multiple"
+      defaultValue={defaultOpenLevels ?? []}
+      className="space-y-4 grow"
+    >
       {sortedLevels.map((level) => {
         const courses = coursesByLevel[level]
         const levelLabel = LEVEL_LABELS[level as keyof typeof LEVEL_LABELS] || level
