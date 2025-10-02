@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { LevelEnum } from "../shared/enums";
 
-const SchoolSchema = z.object({
+export const SchoolSchema = z.object({
   id: z.uuid(),
   name: z.string(),
   level: LevelEnum,

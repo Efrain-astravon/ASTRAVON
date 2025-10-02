@@ -20,7 +20,7 @@ const totalCursos = 27;
 
 const HomeLandingPage = () => {
   return (
-    <div className="w-full flex-grow flex items-center justify-center px-6 py-12">
+    <div className="w-full grow flex items-center justify-center px-6 py-12">
       <div className="flex flex-col gap-8">
         {/* Main Content */}
         <HeroLandingPage />

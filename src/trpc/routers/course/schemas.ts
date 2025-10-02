@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { LevelEnum, ShowStatusEnum } from "../shared/enums";
 
-const CourseSchema = z.object({
+export const CourseSchema = z.object({
   id: z.uuid(),
   title: z.string(),
   description: z.string().optional(),
